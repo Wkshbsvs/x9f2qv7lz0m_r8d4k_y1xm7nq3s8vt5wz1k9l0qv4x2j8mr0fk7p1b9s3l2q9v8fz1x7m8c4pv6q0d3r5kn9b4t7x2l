@@ -943,9 +943,7 @@ UI["53"]["ClearTextOnFocus"] = false
 UI["53"]["Size"] = UDim2.new(0.973, 0, 1, 0)
 UI["53"]["Position"] = UDim2.new(0.02746, 0, 0, 0)
 UI["53"]["BorderColor3"] = Color3.fromRGB(0, 0, 0)
-UI["53"]["Text"] = [[print('Introducing RoniX')
--- Join The Community | DISCORD.GG/RONIX
--- Say Hello To The New UI From ITSKH4NG]]
+UI["53"]["Text"] = [[print('Welcome to Nebula')]]
 UI["53"]["BackgroundTransparency"] = 1
 
 -- // StarterGui.NebulaUI.EditorFrame.Frame.ScrollingFrame.SyntaxEditor.SyntaxScript \\ --
@@ -2563,31 +2561,31 @@ local script = UI["3b"]
 	local TweenService = safe_service("TweenService")
 	
 	local closeButton = script.Parent:FindFirstChild("CloseButton")
-	local ronixButton = script.Parent.Parent.Parent:FindFirstChild("NebulaButton")
+	local nebulaButton = script.Parent.Parent.Parent:FindFirstChild("NebulaButton")
 	local lastPosition = nil;
 	
-	if closeButton and ronixButton then
+	if closeButton and nebulaButton then
 		local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 	
 		local downPosition = UDim2.new(0, 273, 0, 12)
 		local upPosition = UDim2.new(0, 273, 0, -73)
 	
 		local function moveButton(targetPosition)
-			local tween = TweenService:Create(ronixButton, tweenInfo, {Position = targetPosition})
+			local tween = TweenService:Create(nebulaButton, tweenInfo, {Position = targetPosition})
 			tween:Play()
 		end
 	
 		closeButton.MouseButton1Click:Connect(function()
 			moveButton(lastPosition or downPosition)
 			if lastPosition ~= nil then
-                ronixButton.Position = lastPosition;
+                nebulaButton.Position = lastPosition;
             end
 		end)
 	
-		ronixButton.MouseButton1Click:Connect(function()
+		nebulaButton.MouseButton1Click:Connect(function()
 			moveButton(upPosition)
 			
-			lastPosition = ronixButton.Position;
+			lastPosition = nebulaButton.Position;
 		end)
 	end
 end
@@ -3102,15 +3100,15 @@ local script = UI["d7"]
 	
 	--// howd u forget to add this
 	local configButton = script.Parent:WaitForChild("Frame"):WaitForChild("Frame"):WaitForChild("CloseButton")
-	local ronixButton = script.Parent:WaitForChild("NebulaButton")
+	local nebulaButton = script.Parent:WaitForChild("NebulaButton")
 	configButton.MouseButton1Click:Connect(function()
-		ronixButton.Visible = true;
+		nebulaButton.Visible = true;
 		Hidden()
 		Close()
 	end)
 	
-	ronixButton.MouseButton1Click:Connect(function()
-		ronixButton.Visible = false;
+	nebulaButton.MouseButton1Click:Connect(function()
+		nebulaButton.Visible = false;
 		Shown()
 	end)
 	
