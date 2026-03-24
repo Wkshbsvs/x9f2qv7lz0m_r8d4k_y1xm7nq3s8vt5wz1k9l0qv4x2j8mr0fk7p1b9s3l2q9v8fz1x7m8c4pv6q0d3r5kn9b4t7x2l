@@ -21,11 +21,11 @@ for name, url in pairs(assets) do
     end
 end
 
-local HydrogenV121BetaGui = Instance.new("ScreenGui")
-HydrogenV121BetaGui.Name = "HydrogenV1.2.1BetaGui"
-HydrogenV121BetaGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-HydrogenV121BetaGui.ResetOnSpawn = false
-HydrogenV121BetaGui.IgnoreGuiInset = true
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "HydrogenV1.2.1BetaGui"
+ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
+ScreenGui.IgnoreGuiInset = true
 
 local ToggleButton = Instance.new("ImageButton")
 ToggleButton.Name = "ToggleButton"
@@ -34,7 +34,7 @@ ToggleButton.Position = UDim2.new(0.5, -26, 0, 45)
 ToggleButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 ToggleButton.Image = getcustomasset(folder .. "/Logo.png")
 ToggleButton.ZIndex = 10
-ToggleButton.Parent = HydrogenV121BetaGui
+ToggleButton.Parent = ScreenGui
 
 Instance.new("UICorner", ToggleButton).CornerRadius = UDim.new(1, 0)
 
@@ -71,7 +71,7 @@ MainFrame.Name = "MainFrame"
 MainFrame.Size = UDim2.new(1, 0, 1, 0)
 MainFrame.BackgroundTransparency = 1
 MainFrame.Visible = false
-MainFrame.Parent = HydrogenV121BetaGui
+MainFrame.Parent = ScreenGui
 
 local TopBar = Instance.new("Frame")
 TopBar.Name = "TopBar"
@@ -147,8 +147,9 @@ UIList.Padding = UDim.new(0, 35)
 UIList.SortOrder = Enum.SortOrder.LayoutOrder
 UIList.Parent = SideBar
 
-local function AddBtn(img, order)
+local function AddBtn(name, img, order)
     local b = Instance.new("ImageButton")
+    b.Name = name
     b.Size = UDim2.new(0, 22, 0, 22)
     b.BackgroundTransparency = 1
     b.Image = getcustomasset(folder .. "/" .. img)
@@ -157,9 +158,39 @@ local function AddBtn(img, order)
     return b
 end
 
-local Execute = AddBtn("Execute.png", 1)
-local Clear = AddBtn("Clear.png", 2)
-local ExecClip = AddBtn("ExecuteClipboard.png", 3)
+local Execute = AddBtn("Execute", "Execute.png", 1)
+local Clear = AddBtn("Clear", "Clear.png", 2)
+local ExecClip = AddBtn("ExecClip", "ExecuteClipboard.png", 3)
+
+local SuccessNotif = Instance.new("Frame")
+SuccessNotif.Name = "SuccessNotif"
+SuccessNotif.Size = UDim2.new(0, 250, 0, 45)
+SuccessNotif.Position = UDim2.new(1, 50, 1, -70)
+SuccessNotif.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+SuccessNotif.ZIndex = 999
+SuccessNotif.Parent = ScreenGui
+
+Instance.new("UICorner", SuccessNotif).CornerRadius = UDim.new(0, 10)
+
+local SuccessText = Instance.new("TextLabel")
+SuccessText.Size = UDim2.new(1, -50, 1, 0)
+SuccessText.Position = UDim2.new(0, 42, 0, 0)
+SuccessText.BackgroundTransparency = 1
+SuccessText.Text = "Script ran from clipboard!"
+SuccessText.TextColor3 = Color3.fromRGB(255, 255, 255)
+SuccessText.TextSize = 14
+SuccessText.Font = Enum.Font.GothamSemibold
+SuccessText.TextXAlignment = Enum.TextXAlignment.Left
+SuccessText.ZIndex = 1000
+SuccessText.Parent = SuccessNotif
+
+local SuccessIcon = Instance.new("ImageLabel")
+SuccessIcon.Size = UDim2.new(0, 24, 0, 24)
+SuccessIcon.Position = UDim2.new(0, 12, 0.5, -12)
+SuccessIcon.BackgroundTransparency = 1
+SuccessIcon.Image = getcustomasset(folder .. "/Successful.png")
+SuccessIcon.ZIndex = 1000
+SuccessIcon.Parent = SuccessNotif
 
 ToggleButton.MouseButton1Click:Connect(function()
     if not dragToggle then
@@ -186,8 +217,19 @@ Execute.MouseButton1Click:Connect(function()
     end
 end)
 
+local function ShowSuccess()
+    SuccessNotif:TweenPosition(UDim2.new(1, -270, 1, -70), "Out", "Quart", 0.5, true)
+    task.wait(3.5)
+    SuccessNotif:TweenPosition(UDim2.new(1, 50, 1, -70), "In", "Quart", 0.5, true)
+end
+
 ExecClip.MouseButton1Click:Connect(function()
     local success, err = pcall(function()
         loadstring(getclipboard())()
     end)
+    if success then
+        task.spawn(ShowSuccess)
+    else
+        warn("Hydrogen Clipboard Error: " .. err)
+    end
 end)
